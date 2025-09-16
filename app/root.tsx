@@ -1,3 +1,4 @@
+// root.tsx
 import {
   isRouteErrorResponse,
   Links,
@@ -19,10 +20,11 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap",
   },
 ];
 
+// Đây là HTML shell
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -41,16 +43,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-import LayoutComponent from "./routes/Layout";
-
+// Đây là entry point chính, KHÔNG cần LayoutComponent ở đây nữa
+// Remix sẽ tự render routes qua <Outlet />
 export default function App() {
-  return (
-    <LayoutComponent>
-      <Outlet />
-    </LayoutComponent>
-  );
+  return <Outlet />;
 }
 
+// ErrorBoundary mặc định
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred.";

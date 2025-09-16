@@ -3,27 +3,7 @@ import { LayoutDashboard, Building, Calendar, CreditCard } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen font-sans">
-
-      {/* Navbar */}
-      <header className="fixed top-0 left-0 w-full flex justify-between items-center px-8 py-4 bg-white/70 backdrop-blur-md z-50 shadow">
-  <h1 className="text-2xl font-bold text-[#5a3e2b]">Hotel Manager</h1>
-  <div className="flex gap-4">
-    <Link
-      to="/login"
-      className="px-4 py-2 border border-[#5a3e2b] text-[#5a3e2b] rounded-lg hover:bg-[#f3e5d0] transition"
-    >
-      Đăng nhập
-    </Link>
-    <Link
-      to="/register"
-      className="px-4 py-2 bg-[#f3e5d0] text-[#5a3e2b] rounded-lg hover:bg-[#e6d2aa] transition"
-    >
-      Đăng ký
-    </Link>
-  </div>
-</header>
-
+    <>
       {/* Hero Section */}
       <section
         className="relative h-screen flex items-center justify-center text-center bg-cover bg-center"
@@ -31,10 +11,7 @@ export default function Home() {
           backgroundImage: "url('/images/hotel-hero.jpg')",
         }}
       >
-        {/* Overlay toàn màn hình mờ */}
         <div className="absolute inset-0 bg-black/30"></div>
-
-        {/* Box đen mờ giữa màn hình */}
         <div className="relative z-10 max-w-3xl px-8 py-12 bg-black/70 rounded-3xl shadow-2xl text-white">
           <h1 className="text-5xl md:text-6xl font-extrabold animate-fadeIn">
             Hotel Manager System
@@ -89,19 +66,7 @@ export default function Home() {
           Đăng ký ngay
         </Link>
       </section>
-
-      {/* Footer */}
-      <footer className="py-6 bg-[#e6d2aa] text-[#5a3e2b] text-center">
-        <p>© {new Date().getFullYear()} Hotel Manager. All rights reserved.</p>
-      </footer>
-
-      <style>{`
-        @keyframes fadeIn {from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);}}
-        .animate-fadeIn {animation:fadeIn 1s forwards;}
-        .animate-fadeIn.delay-200 {animation-delay:0.2s;}
-        .animate-fadeIn.delay-400 {animation-delay:0.4s;}
-      `}</style>
-    </div>
+    </>
   );
 }
 

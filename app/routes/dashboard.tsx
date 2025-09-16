@@ -36,15 +36,15 @@ export default function Dashboard() {
       </header>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatsCard title="Total Bookings" value="1,234" color="bg-blue-500" />
         <StatsCard title="Occupancy Rate" value="85%" color="bg-yellow-500" />
         <StatsCard title="Total Revenue" value="$120,500" color="bg-green-500" />
         <StatsCard title="Available Rooms" value="56" color="bg-purple-500" />
-      </div>
+      </section>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Biểu đồ Bar */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold text-gray-700 mb-4">
@@ -52,9 +52,9 @@ export default function Dashboard() {
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="month" stroke="#374151" />
+              <YAxis stroke="#374151" />
               <Tooltip />
               <Legend />
               <Bar
@@ -74,9 +74,9 @@ export default function Dashboard() {
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="month" stroke="#374151" />
+              <YAxis stroke="#374151" />
               <Tooltip />
               <Legend />
               <Line
@@ -90,7 +90,7 @@ export default function Dashboard() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
