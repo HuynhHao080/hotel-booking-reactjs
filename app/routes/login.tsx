@@ -1,4 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
+import { LogIn } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -10,30 +11,36 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">Đăng nhập</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-3 border rounded"
-          />
-          <input
-            type="password"
-            placeholder="Mật khẩu"
-            className="w-full p-3 border rounded"
-          />
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#f8f1e9] to-[#fff]">
+      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
+        <h1 className="text-2xl font-bold text-center text-[#5a3e2b] mb-6">Đăng nhập</h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-[#5a3e2b] mb-1">Email</label>
+            <input
+              type="email"
+              placeholder="Nhập email của bạn"
+              className="w-full p-3 border-2 border-[#c9a978] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d2b48c] placeholder-[#5a3e2b]/50"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-[#5a3e2b] mb-1">Mật khẩu</label>
+            <input
+              type="password"
+              placeholder="Nhập mật khẩu"
+              className="w-full p-3 border-2 border-[#c9a978] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d2b48c] placeholder-[#5a3e2b]/50"
+            />
+          </div>
           <button
             type="submit"
-            className="w-full bg-[#d2b48c] text-white py-3 rounded hover:bg-[#c9a978] transition"
+            className="w-full flex items-center justify-center bg-gradient-to-r from-[#d2b48c] to-[#f3e5d0] text-[#5a3e2b] py-3 rounded-xl shadow-lg hover:from-[#c9a978] hover:to-[#e6d2aa] transition-all duration-300 transform hover:scale-105"
           >
-            Đăng nhập
+            <LogIn className="mr-2 h-5 w-5" /> Đăng nhập
           </button>
         </form>
-        <p className="mt-4 text-center text-sm">
+        <p className="mt-6 text-center text-sm text-[#5a3e2b]">
           Chưa có tài khoản?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline">
+          <Link to="/register" className="text-[#d2b48c] hover:underline font-medium">
             Đăng ký
           </Link>
         </p>
