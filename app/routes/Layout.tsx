@@ -10,8 +10,6 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import { useState } from "react";
-import ThemeToggle from "../components/ThemeToggle";
 
 const links = [
   { to: "/", label: "Home", icon: Home },
