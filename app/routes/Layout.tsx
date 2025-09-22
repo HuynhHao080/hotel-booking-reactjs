@@ -35,9 +35,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Header */}
         <div className="p-6 flex items-center justify-between border-b border-[#c9a978]/20">
           {!collapsed && (
-            <h1 className="text-xl font-bold text-[#5a3e2b]">
-              Hotel Manager
-            </h1>
+            <Link
+      to="/"
+      className="text-lg font-bold text-[#5a3e2b] tracking-wide hover:text-[#b68d40] transition"
+    >
+      Hotel Manager
+    </Link>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}

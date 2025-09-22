@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { Plus, Trash2, Hotel } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function Hotels() {
   const [hotels, setHotels] = useState<{ id: number; name: string }[]>([]);
@@ -14,6 +22,13 @@ export default function Hotels() {
   const deleteHotel = (id: number) => {
     setHotels(hotels.filter((h) => h.id !== id));
   };
+
+  // Fake data biểu đồ
+  const chartData = [
+    { name: "KS A", rooms: 40 },
+    { name: "KS B", rooms: 25 },
+    { name: "KS C", rooms: 60 },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#faf7f2] to-[#f4ede4] text-[#4b2e1e] p-6 md:p-12 font-sans">
@@ -48,8 +63,8 @@ export default function Hotels() {
           Chưa có khách sạn nào. Hãy thêm khách sạn mới!
         </p>
       ) : (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {hotels.map((h, i) => (
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {hotels.map((h) => (
             <li
               key={h.id}
               className="bg-gradient-to-r from-[#fff7ec] to-[#f7f2e9] rounded-2xl shadow-md hover:shadow-xl 
@@ -82,6 +97,19 @@ export default function Hotels() {
           ))}
         </ul>
       )}
+
+      {/* Fake Chart */}
+      <div className="bg-white rounded-2xl p-6 shadow-lg">
+        <h2 className="text-xl font-bold mb-4">Biểu đồ số phòng (demo)</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={chartData}>
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="rooms" fill="#caa968" radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
