@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { LayoutDashboard, Building, Calendar, CreditCard, Bed, FileText, Settings, Users } from "lucide-react";
+import { LayoutDashboard, Building, Calendar, CreditCard, Bed, FileText, Settings, Users, Bell } from "lucide-react";
 
 export default function Home() {
   return (
@@ -7,23 +7,46 @@ export default function Home() {
       {/* Navbar */}
       <header className="fixed top-0 left-0 w-full flex justify-between items-center px-8 py-4 bg-white/80 backdrop-blur-md shadow-lg z-50">
         <h1 className="text-2xl font-bold text-[#5a3e2b]">Hotel Manager</h1>
-        <div className="flex gap-4">
-          <Link to="/login" className="px-4 py-2 border-2 border-[#5a3e2b] text-[#5a3e2b] rounded-full hover:bg-[#f3e5d0] transition">
+        <div className="flex items-center gap-4">
+          {/* Icon chuông */}
+          <button className="relative p-2 rounded-full hover:bg-[#f3e5d0] transition">
+            <Bell className="w-6 h-6 text-[#5a3e2b]" />
+            {/* Chấm đỏ thông báo (badge) */}
+            <span className="absolute top-1 right-1 block w-2 h-2 bg-red-500 rounded-full"></span>
+          </button>
+
+          <Link
+            to="/login"
+            className="px-4 py-2 border-2 border-[#5a3e2b] text-[#5a3e2b] rounded-full hover:bg-[#f3e5d0] transition"
+          >
             Đăng nhập
           </Link>
-          <Link to="/register" className="px-4 py-2 bg-[#d2b48c] text-white rounded-full hover:bg-[#c9a978] transition">
+          <Link
+            to="/register"
+            className="px-4 py-2 bg-[#d2b48c] text-white rounded-full hover:bg-[#c9a978] transition"
+          >
             Đăng ký
           </Link>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('/images/hotel-hero.jpg')" }}>
+      <section
+        className="relative h-screen flex items-center justify-center text-center bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/hotel-hero.jpg')" }}
+      >
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         <div className="relative z-10 max-w-4xl px-8 py-12 bg-black/60 rounded-2xl shadow-xl text-white">
-          <h1 className="text-5xl md:text-6xl font-extrabold animate-fadeInUp">Hotel Manager System</h1>
-          <p className="mt-4 text-xl md:text-2xl animate-fadeInUp delay-200">Nền tảng quản lý khách sạn toàn diện 🚀</p>
-          <Link to="/dashboard" className="mt-8 inline-block px-8 py-3 bg-gradient-to-r from-[#f3e5d0] to-[#d2b48c] text-[#5a3e2b] rounded-full shadow-lg hover:from-[#efd9b3] hover:to-[#c9a978] transition animate-fadeInUp delay-400">
+          <h1 className="text-5xl md:text-6xl font-extrabold animate-fadeInUp">
+            Hotel Manager System
+          </h1>
+          <p className="mt-4 text-xl md:text-2xl animate-fadeInUp delay-200">
+            Nền tảng quản lý khách sạn toàn diện 🚀
+          </p>
+          <Link
+            to="/dashboard"
+            className="mt-8 inline-block px-8 py-3 bg-gradient-to-r from-[#f3e5d0] to-[#d2b48c] text-[#5a3e2b] rounded-full shadow-lg hover:from-[#efd9b3] hover:to-[#c9a978] transition animate-fadeInUp delay-400"
+          >
             Vào Dashboard
           </Link>
         </div>
