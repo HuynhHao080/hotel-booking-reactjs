@@ -11,24 +11,30 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#f8f1e9] to-[#fff]">
-      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-[#5a3e2b] mb-6">Đăng nhập</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#f8f1e9] to-[#fff] dark:from-gray-900 dark:to-gray-800 pt-20 transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-8 w-full max-w-md transition-colors duration-300">
+        <h1 className="text-2xl font-bold text-center text-[#5a3e2b] dark:text-white mb-6">
+          Đăng nhập
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-[#5a3e2b] mb-1">Email</label>
+            <label className="block text-sm font-medium text-[#5a3e2b] dark:text-white mb-1">
+              Email
+            </label>
             <input
               type="email"
               placeholder="Nhập email của bạn"
-              className="w-full p-3 border-2 border-[#c9a978] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d2b48c] placeholder-[#5a3e2b]/50"
+              className="w-full p-3 border-2 border-[#c9a978] dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d2b48c] dark:focus:ring-gray-500 placeholder-[#5a3e2b]/50 dark:placeholder-gray-400 bg-white dark:bg-gray-700 text-[#5a3e2b] dark:text-white transition-colors duration-300"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#5a3e2b] mb-1">Mật khẩu</label>
+            <label className="block text-sm font-medium text-[#5a3e2b] dark:text-white mb-1">
+              Mật khẩu
+            </label>
             <input
               type="password"
               placeholder="Nhập mật khẩu"
-              className="w-full p-3 border-2 border-[#c9a978] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d2b48c] placeholder-[#5a3e2b]/50"
+              className="w-full p-3 border-2 border-[#c9a978] dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d2b48c] dark:focus:ring-gray-500 placeholder-[#5a3e2b]/50 dark:placeholder-gray-400 bg-white dark:bg-gray-700 text-[#5a3e2b] dark:text-white transition-colors duration-300"
             />
           </div>
           <button
@@ -38,9 +44,12 @@ export default function Login() {
             <LogIn className="mr-2 h-5 w-5" /> Đăng nhập
           </button>
         </form>
-        <p className="mt-6 text-center text-sm text-[#5a3e2b]">
+        <p className="mt-6 text-center text-sm text-[#5a3e2b] dark:text-gray-300">
           Chưa có tài khoản?{" "}
-          <Link to="/register" className="text-[#d2b48c] hover:underline font-medium">
+          <Link
+            to="/register"
+            className="text-[#d2b48c] hover:underline font-medium"
+          >
             Đăng ký
           </Link>
         </p>

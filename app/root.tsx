@@ -8,6 +8,7 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { UIProvider } from "./contexts/UIContext";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -45,9 +46,11 @@ import LayoutComponent from "./routes/Layout";
 
 export default function App() {
   return (
-    <LayoutComponent>
-      <Outlet />
-    </LayoutComponent>
+    <UIProvider>
+      <LayoutComponent>
+        <Outlet />
+      </LayoutComponent>
+    </UIProvider>
   );
 }
 

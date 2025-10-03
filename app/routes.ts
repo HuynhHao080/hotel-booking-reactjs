@@ -14,7 +14,6 @@ export default [
   route('settings', 'routes/settings.tsx'),  // Route `/settings`
   route('staff', 'routes/staff.tsx'),  // Route `/staff
   route('customers', 'routes/customers.tsx'),  // Route `/customers
-
   // auth routes
   route("login", "routes/login.tsx"),
   route("register", "routes/register.tsx"),
