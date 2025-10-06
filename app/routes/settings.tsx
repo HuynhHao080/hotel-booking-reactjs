@@ -5,6 +5,7 @@ import {
   MapPin, CreditCard, Clock, Monitor, Smartphone,
   Sun, Moon, Eye, EyeOff, Check, X, AlertCircle
 } from "lucide-react";
+import { useUI } from "../contexts/UIContext";
 import authService from "../services/authService";
 
 interface SettingsSection {
@@ -25,6 +26,7 @@ interface SettingItem {
 }
 
 export default function Settings() {
+  const { isDark } = useUI();
   const [activeSection, setActiveSection] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -350,22 +352,30 @@ export default function Settings() {
   };
 
   const renderSettingInput = (setting: SettingItem, sectionId: string) => {
-    const commonClasses = "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968]";
+    const commonClasses = `w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+      isDark
+        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+    }`;
 
     switch (setting.type) {
       case 'toggle':
         return (
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <label className="text-sm font-medium text-gray-700">{setting.label}</label>
+              <label className={`text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                {setting.label}
+              </label>
               {setting.description && (
-                <p className="text-xs text-gray-500 mt-1">{setting.description}</p>
+                <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                  {setting.description}
+                </p>
               )}
             </div>
             <button
               onClick={() => handleSettingChange(sectionId, setting.id, !setting.value)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                setting.value ? 'bg-[#caa968]' : 'bg-gray-200'
+                setting.value ? 'bg-[#caa968]' : isDark ? 'bg-gray-600' : 'bg-gray-200'
               }`}
             >
               <span
@@ -380,7 +390,9 @@ export default function Settings() {
       case 'select':
         return (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{setting.label}</label>
+            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+              {setting.label}
+            </label>
             <select
               value={setting.value}
               onChange={(e) => handleSettingChange(sectionId, setting.id, e.target.value)}
@@ -396,7 +408,9 @@ export default function Settings() {
       case 'textarea':
         return (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{setting.label}</label>
+            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+              {setting.label}
+            </label>
             <textarea
               value={setting.value}
               onChange={(e) => handleSettingChange(sectionId, setting.id, e.target.value)}
@@ -411,7 +425,9 @@ export default function Settings() {
         const inputType = setting.id.includes('password') ? 'password' : 'text';
         return (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{setting.label}</label>
+            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+              {setting.label}
+            </label>
             <div className="relative">
               <input
                 type={setting.id.includes('password') && !showPassword ? 'password' : 'text'}
@@ -424,7 +440,9 @@ export default function Settings() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className={`absolute right-3 top-1/2 transform -translate-y-1/2 hover:text-gray-600 transition-colors duration-300 ${
+                    isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-400'
+                  }`}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -438,13 +456,17 @@ export default function Settings() {
   const currentSection = settingsSections.find(s => s.id === activeSection);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#fdfaf6] to-[#f4ede4] text-[#4b2e1e] p-6 md:p-12 font-sans">
+    <div className={`min-h-screen transition-colors duration-300 p-6 md:p-12 font-sans ${
+      isDark
+        ? 'bg-gray-900 text-white'
+        : 'bg-gradient-to-b from-[#fdfaf6] to-[#f4ede4] text-[#4b2e1e]'
+    }`}>
       {/* Header */}
-      <div className="flex items-center gap-3 mb-8">
-        <SettingsIcon className="h-10 w-10 text-[#b68d40]" />
+      <div className="flex items-center gap-3 mb-8 animate-fadeInUp">
+        <SettingsIcon className={`h-10 w-10 ${isDark ? 'text-blue-400' : 'text-[#b68d40]'}`} />
         <div>
           <h1 className="text-4xl font-extrabold tracking-tight">Cài đặt hệ thống</h1>
-          <p className="text-lg text-gray-700 mt-1">
+          <p className={`text-lg mt-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
             Quản lý và tùy chỉnh cài đặt cho hệ thống khách sạn
           </p>
         </div>
@@ -453,8 +475,12 @@ export default function Settings() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-6">
-            <h2 className="text-lg font-semibold text-[#4b2e1e] mb-4">Danh mục cài đặt</h2>
+          <div className={`backdrop-blur-md rounded-3xl shadow-lg p-6 transition-colors duration-300 ${
+            isDark ? 'bg-gray-800/90 border border-gray-700' : 'bg-white/90'
+          }`}>
+            <h2 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-[#4b2e1e]'}`}>
+              Danh mục cài đặt
+            </h2>
             <nav className="space-y-2">
               {settingsSections.map(section => {
                 const IconComponent = section.icon;
@@ -465,13 +491,21 @@ export default function Settings() {
                     className={`w-full flex items-center p-3 rounded-2xl text-left transition-all duration-300 ${
                       activeSection === section.id
                         ? 'bg-[#caa968] text-white'
-                        : 'hover:bg-[#f3e5d0] text-gray-700'
+                        : isDark
+                          ? 'hover:bg-gray-700 text-gray-300'
+                          : 'hover:bg-[#f3e5d0] text-gray-700'
                     }`}
                   >
                     <IconComponent className="h-5 w-5 mr-3" />
                     <div>
                       <div className="font-medium">{section.title}</div>
-                      <div className={`text-xs ${activeSection === section.id ? 'text-white/80' : 'text-gray-500'}`}>
+                      <div className={`text-xs ${
+                        activeSection === section.id
+                          ? 'text-white/80'
+                          : isDark
+                            ? 'text-gray-400'
+                            : 'text-gray-500'
+                      }`}>
                         {section.description}
                       </div>
                     </div>
@@ -485,13 +519,19 @@ export default function Settings() {
         {/* Main Content */}
         <div className="lg:col-span-3">
           {currentSection && (
-            <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-6">
+            <div className={`backdrop-blur-md rounded-3xl shadow-lg p-6 transition-colors duration-300 ${
+              isDark ? 'bg-gray-800/90 border border-gray-700' : 'bg-white/90'
+            }`}>
               {/* Thông báo lỗi/thành công */}
               {message && (
                 <div className={`mb-6 p-4 rounded-lg flex items-center ${
                   message.type === 'success'
-                    ? 'bg-green-100 border border-green-300 text-green-700'
-                    : 'bg-red-100 border border-red-300 text-red-700'
+                    ? isDark
+                      ? 'bg-green-900/50 border border-green-700 text-green-300'
+                      : 'bg-green-100 border border-green-300 text-green-700'
+                    : isDark
+                      ? 'bg-red-900/50 border border-red-700 text-red-300'
+                      : 'bg-red-100 border border-red-300 text-red-700'
                 }`}>
                   {message.type === 'success' ? (
                     <Check className="h-5 w-5 mr-2" />
@@ -504,8 +544,12 @@ export default function Settings() {
 
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-[#4b2e1e]">{currentSection.title}</h2>
-                  <p className="text-gray-600 mt-1">{currentSection.description}</p>
+                  <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-[#4b2e1e]'}`}>
+                    {currentSection.title}
+                  </h2>
+                  <p className={`mt-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    {currentSection.description}
+                  </p>
                 </div>
                 <button
                   onClick={() => handleSave(activeSection)}
@@ -517,9 +561,11 @@ export default function Settings() {
                 </button>
               </div>
 
-              <div className="space-y-6">
+              <div className={`space-y-6 ${isDark ? 'border-gray-700' : 'border-gray-100'}`}>
                 {currentSection.settings.map(setting => (
-                  <div key={setting.id} className="border-b border-gray-100 pb-6 last:border-b-0 last:pb-0">
+                  <div key={setting.id} className={`pb-6 last:pb-0 ${
+                    isDark ? 'border-gray-700' : 'border-gray-100'
+                  }`}>
                     {renderSettingInput(setting, activeSection)}
                   </div>
                 ))}

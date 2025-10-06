@@ -554,7 +554,7 @@ export default function Hotels() {
           {filteredHotels.map((hotel, i) => (
             <div
               key={hotel.id}
-              className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp"
+              className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp group"
               style={{ animationDelay: `${i * 0.1}s` }}
             >
               {/* Hotel Image */}

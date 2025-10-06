@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useUI } from "../contexts/UIContext";
 import {
   BedDouble, PlusCircle, Trash2, Search, Filter, Edit, Eye,
   Wifi, Car, Utensils, Dumbbell, Waves, Coffee, Users,
@@ -22,6 +23,7 @@ interface Room {
 }
 
 export default function RoomPage() {
+  const { isDark } = useUI();
   const [rooms, setRooms] = useState<Room[]>([
     {
       id: 1,
@@ -132,61 +134,95 @@ export default function RoomPage() {
 
   const RoomDetailsModal = ({ room, onClose }: { room: Room; onClose: () => void }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
+      <div className={`rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-300 ${
+        isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
+      }`}>
+        <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-[#4b2e1e]">Chi tiết phòng</h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-[#4b2e1e]'}`}>
+              Chi tiết phòng
+            </h2>
+            <button onClick={onClose} className={`transition-colors duration-300 ${
+              isDark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+            }`}>
               ✕
             </button>
           </div>
         </div>
-        
+
         <div className="p-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Room Info */}
             <div className="space-y-4">
               <div>
-                <h3 className="text-xl font-bold text-[#4b2e1e] mb-2">{room.name}</h3>
+                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-[#4b2e1e]'}`}>
+                  {room.name}
+                </h3>
                 <div className="flex items-center gap-4 mb-4">
                   <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(room.status)}`}>
                     {getStatusText(room.status)}
                   </span>
-                  <span className="text-sm text-gray-500">Tầng {room.floor}</span>
+                  <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Tầng {room.floor}
+                  </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Loại phòng</p>
-                  <p className="font-medium">{room.type}</p>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Loại phòng
+                  </p>
+                  <p className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                    {room.type}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Sức chứa</p>
-                  <p className="font-medium">{room.capacity} người</p>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Sức chứa
+                  </p>
+                  <p className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                    {room.capacity} người
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Diện tích</p>
-                  <p className="font-medium">{room.size} m²</p>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Diện tích
+                  </p>
+                  <p className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                    {room.size} m²
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Giá/đêm</p>
-                  <p className="font-medium text-lg text-[#b68d40]">{formatCurrency(room.price)}</p>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Giá/đêm
+                  </p>
+                  <p className={`font-medium text-lg ${isDark ? 'text-blue-400' : 'text-[#b68d40]'}`}>
+                    {formatCurrency(room.price)}
+                  </p>
                 </div>
               </div>
 
               <div>
-                <p className="text-sm text-gray-500 mb-2">Mô tả</p>
-                <p className="text-gray-700">{room.description}</p>
+                <p className={`text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Mô tả
+                </p>
+                <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {room.description}
+                </p>
               </div>
 
               <div>
-                <p className="text-sm text-gray-500 mb-2">Tiện nghi</p>
+                <p className={`text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Tiện nghi
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {room.amenities.map(amenity => {
                     const IconComponent = getAmenityIcon(amenity);
                     return (
-                      <div key={amenity} className="flex items-center bg-[#f3e5d0] px-3 py-1 rounded-full text-sm">
+                      <div key={amenity} className={`flex items-center px-3 py-1 rounded-full text-sm ${
+                        isDark ? 'bg-gray-700 text-gray-300' : 'bg-[#f3e5d0] text-gray-700'
+                      }`}>
                         {IconComponent && <IconComponent className="h-4 w-4 mr-1" />}
                         {availableAmenities.find(a => a.key === amenity)?.label}
                       </div>
@@ -198,30 +234,54 @@ export default function RoomPage() {
 
             {/* Maintenance Info */}
             <div className="space-y-4">
-              <div className="bg-[#f8f1e9] p-4 rounded-2xl">
-                <h4 className="font-semibold text-[#4b2e1e] mb-3">Thông tin bảo trì</h4>
+              <div className={`p-4 rounded-2xl ${
+                isDark ? 'bg-gray-700/50' : 'bg-[#f8f1e9]'
+              }`}>
+                <h4 className={`font-semibold mb-3 ${isDark ? 'text-white' : 'text-[#4b2e1e]'}`}>
+                  Thông tin bảo trì
+                </h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Lần dọn cuối:</span>
-                    <span className="font-medium">{formatDate(room.lastCleaned)}</span>
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Lần dọn cuối:
+                    </span>
+                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                      {formatDate(room.lastCleaned)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Bảo trì tiếp theo:</span>
-                    <span className="font-medium">{formatDate(room.nextMaintenance)}</span>
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Bảo trì tiếp theo:
+                    </span>
+                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                      {formatDate(room.nextMaintenance)}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#f3e5d0] p-4 rounded-2xl">
-                <h4 className="font-semibold text-[#4b2e1e] mb-3">Thống kê</h4>
+              <div className={`p-4 rounded-2xl ${
+                isDark ? 'bg-gray-700/50' : 'bg-[#f3e5d0]'
+              }`}>
+                <h4 className={`font-semibold mb-3 ${isDark ? 'text-white' : 'text-[#4b2e1e]'}`}>
+                  Thống kê
+                </h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Tỷ lệ lấp đầy:</span>
-                    <span className="font-medium">85%</span>
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Tỷ lệ lấp đầy:
+                    </span>
+                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                      85%
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Doanh thu tháng:</span>
-                    <span className="font-medium text-[#b68d40]">{formatCurrency(room.price * 25)}</span>
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Doanh thu tháng:
+                    </span>
+                    <span className={`font-medium ${isDark ? 'text-blue-400' : 'text-[#b68d40]'}`}>
+                      {formatCurrency(room.price * 25)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -234,93 +294,141 @@ export default function RoomPage() {
 
   const AddRoomModal = ({ onClose }: { onClose: () => void }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-[#4b2e1e]">Thêm phòng mới</h2>
+      <div className={`rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-300 ${
+        isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
+      }`}>
+        <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-[#4b2e1e]'}`}>
+            Thêm phòng mới
+          </h2>
         </div>
-        
+
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Tên phòng</label>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                Tên phòng
+              </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+                className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
                 placeholder="VD: Deluxe 101"
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Loại phòng</label>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                Loại phòng
+              </label>
               <select
                 value={formData.type}
                 onChange={(e) => setFormData({...formData, type: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+                className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-gray-700 border-gray-600 text-white'
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
               >
                 {roomTypes.map(type => (
                   <option key={type} value={type}>{type}</option>
                 ))}
               </select>
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Giá/đêm (VNĐ)</label>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                Giá/đêm (VNĐ)
+              </label>
               <input
                 type="number"
                 value={formData.price}
                 onChange={(e) => setFormData({...formData, price: Number(e.target.value)})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+                className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Sức chứa</label>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                Sức chứa
+              </label>
               <input
                 type="number"
                 value={formData.capacity}
                 onChange={(e) => setFormData({...formData, capacity: Number(e.target.value)})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+                className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
                 min="1"
                 max="10"
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Tầng</label>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                Tầng
+              </label>
               <input
                 type="number"
                 value={formData.floor}
                 onChange={(e) => setFormData({...formData, floor: Number(e.target.value)})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+                className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
                 min="1"
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Diện tích (m²)</label>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                Diện tích (m²)
+              </label>
               <input
                 type="number"
                 value={formData.size}
                 onChange={(e) => setFormData({...formData, size: Number(e.target.value)})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+                className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
               />
             </div>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Mô tả</label>
+            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+              Mô tả
+            </label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({...formData, description: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+              className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+                isDark
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
               rows={3}
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Tiện nghi</label>
+            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+              Tiện nghi
+            </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {availableAmenities.map(amenity => {
                 const IconComponent = amenity.icon;
@@ -336,9 +444,11 @@ export default function RoomPage() {
                       setFormData({...formData, amenities: newAmenities});
                     }}
                     className={`flex items-center p-2 rounded-lg border transition-colors ${
-                      isSelected 
-                        ? 'bg-[#caa968] text-white border-[#caa968]' 
-                        : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                      isSelected
+                        ? 'bg-[#caa968] text-white border-[#caa968]'
+                        : isDark
+                          ? 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'
+                          : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     <IconComponent className="h-4 w-4 mr-2" />
@@ -348,11 +458,15 @@ export default function RoomPage() {
               })}
             </div>
           </div>
-          
+
           <div className="flex justify-end gap-3 pt-4">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className={`px-4 py-2 rounded-lg border transition-colors duration-300 ${
+                isDark
+                  ? 'text-gray-300 border-gray-600 hover:bg-gray-700'
+                  : 'text-gray-600 border-gray-300 hover:bg-gray-50'
+              }`}
             >
               Hủy
             </button>
@@ -361,7 +475,7 @@ export default function RoomPage() {
                 // Add room logic here
                 onClose();
               }}
-              className="px-4 py-2 bg-[#caa968] text-white rounded-lg hover:bg-[#b68d40]"
+              className="px-4 py-2 bg-[#caa968] text-white rounded-lg hover:bg-[#b68d40] transition-colors duration-300"
             >
               Thêm phòng
             </button>
@@ -378,54 +492,84 @@ export default function RoomPage() {
   const maintenanceRooms = rooms.filter(r => r.status === 'maintenance').length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#fdfaf6] to-[#f4ede4] text-[#4b2e1e] p-6 md:p-12 font-sans">
+    <div className={`min-h-screen transition-colors duration-300 p-6 md:p-12 font-sans ${
+      isDark
+        ? 'bg-gray-900 text-white'
+        : 'bg-gradient-to-b from-[#fdfaf6] to-[#f4ede4] text-[#4b2e1e]'
+    }`}>
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
         <div className="flex items-center gap-3">
-          <BedDouble className="h-10 w-10 text-[#b68d40]" />
+          <BedDouble className={`h-10 w-10 ${isDark ? 'text-blue-400' : 'text-[#b68d40]'}`} />
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight">Quản lý Phòng</h1>
-            <p className="text-lg text-gray-700 mt-1">
+            <p className={`text-lg mt-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
               Quản lý thông tin và trạng thái các phòng trong khách sạn
             </p>
           </div>
         </div>
-        
+
         {/* Stats Cards */}
         <div className="flex gap-4">
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-4 text-center min-w-[120px]">
-            <p className="text-2xl font-bold text-[#b68d40]">{totalRooms}</p>
-            <p className="text-sm text-gray-600">Tổng phòng</p>
+          <div className={`backdrop-blur-md rounded-2xl shadow-lg p-4 text-center min-w-[120px] transition-colors duration-300 ${
+            isDark ? 'bg-gray-800/90 border border-gray-700' : 'bg-white/90'
+          }`}>
+            <p className={`text-2xl font-bold ${isDark ? 'text-blue-400' : 'text-[#b68d40]'}`}>
+              {totalRooms}
+            </p>
+            <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              Tổng phòng
+            </p>
           </div>
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-4 text-center min-w-[120px]">
+          <div className={`backdrop-blur-md rounded-2xl shadow-lg p-4 text-center min-w-[120px] transition-colors duration-300 ${
+            isDark ? 'bg-gray-800/90 border border-gray-700' : 'bg-white/90'
+          }`}>
             <p className="text-2xl font-bold text-green-600">{availableRooms}</p>
-            <p className="text-sm text-gray-600">Trống</p>
+            <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              Trống
+            </p>
           </div>
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-4 text-center min-w-[120px]">
+          <div className={`backdrop-blur-md rounded-2xl shadow-lg p-4 text-center min-w-[120px] transition-colors duration-300 ${
+            isDark ? 'bg-gray-800/90 border border-gray-700' : 'bg-white/90'
+          }`}>
             <p className="text-2xl font-bold text-red-600">{occupiedRooms}</p>
-            <p className="text-sm text-gray-600">Đã đặt</p>
+            <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              Đã đặt
+            </p>
           </div>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-6 mb-6">
+      <div className={`backdrop-blur-md rounded-3xl shadow-lg p-6 mb-6 transition-colors duration-300 ${
+        isDark ? 'bg-gray-800/90 border border-gray-700' : 'bg-white/90'
+      }`}>
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
+              isDark ? 'text-gray-400' : 'text-gray-400'
+            }`} />
             <input
               type="text"
               placeholder="Tìm kiếm phòng..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-[#d3b98e] rounded-2xl bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+              className={`w-full pl-10 pr-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+                isDark
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-white/70 border-[#d3b98e] text-gray-900 placeholder-gray-500'
+              }`}
             />
           </div>
-          
+
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-3 border border-[#d3b98e] rounded-2xl bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+            className={`px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+              isDark
+                ? 'bg-gray-700 border-gray-600 text-white'
+                : 'bg-white/70 border-[#d3b98e] text-gray-900'
+            }`}
           >
             <option value="all">Tất cả trạng thái</option>
             <option value="available">Trống</option>
@@ -433,18 +577,22 @@ export default function RoomPage() {
             <option value="maintenance">Bảo trì</option>
             <option value="cleaning">Đang dọn</option>
           </select>
-          
+
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-3 border border-[#d3b98e] rounded-2xl bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#caa968]"
+            className={`px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#caa968] transition-colors duration-300 ${
+              isDark
+                ? 'bg-gray-700 border-gray-600 text-white'
+                : 'bg-white/70 border-[#d3b98e] text-gray-900'
+            }`}
           >
             <option value="all">Tất cả loại phòng</option>
             {roomTypes.map(type => (
               <option key={type} value={type}>{type}</option>
             ))}
           </select>
-          
+
           <div className="flex gap-3">
             <button
               onClick={() => setShowAddModal(true)}
@@ -465,22 +613,30 @@ export default function RoomPage() {
       {/* Room List */}
       {filteredRooms.length === 0 ? (
         <div className="text-center py-12">
-          <BedDouble className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <p className="text-gray-500 text-lg">Không tìm thấy phòng nào</p>
-          <p className="text-gray-400">Hãy thêm phòng mới hoặc điều chỉnh bộ lọc</p>
+          <BedDouble className={`mx-auto h-12 w-12 mb-4 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
+          <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+            Không tìm thấy phòng nào
+          </p>
+          <p className={`${isDark ? 'text-gray-400' : 'text-gray-400'}`}>
+            Hãy thêm phòng mới hoặc điều chỉnh bộ lọc
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredRooms.map((room, i) => (
             <div
               key={room.id}
-              className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp"
+              className={`backdrop-blur-md rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp group cursor-pointer ${
+                isDark ? 'bg-gray-800/90 border border-gray-700' : 'bg-white/90'
+              }`}
               style={{ animationDelay: `${i * 0.1}s` }}
             >
               {/* Room Image */}
               <div className="relative h-48 overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-[#f3e5d0] to-[#e6d2aa] flex items-center justify-center">
-                  <BedDouble className="h-16 w-16 text-[#b68d40]" />
+                <div className={`w-full h-full flex items-center justify-center ${
+                  isDark ? 'bg-gray-700' : 'bg-gradient-to-br from-[#f3e5d0] to-[#e6d2aa]'
+                }`}>
+                  <BedDouble className={`h-16 w-16 ${isDark ? 'text-gray-400' : 'text-[#b68d40]'}`} />
                 </div>
                 <div className="absolute top-3 right-3">
                   <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(room.status)}`}>
@@ -493,8 +649,12 @@ export default function RoomPage() {
               <div className="p-5">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-[#4b2e1e] mb-1">{room.name}</h3>
-                    <p className="text-sm text-gray-600">{room.type} • Tầng {room.floor}</p>
+                    <h3 className={`text-lg font-semibold mb-1 ${isDark ? 'text-white' : 'text-[#4b2e1e]'}`}>
+                      {room.name}
+                    </h3>
+                    <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                      {room.type} • Tầng {room.floor}
+                    </p>
                   </div>
                   <div className="flex gap-1">
                     <button
@@ -502,19 +662,25 @@ export default function RoomPage() {
                         setSelectedRoom(room);
                         setShowDetailsModal(true);
                       }}
-                      className="p-2 rounded-full hover:bg-[#f3e5d0] transition-colors"
+                      className={`p-2 rounded-full transition-colors ${
+                        isDark ? 'hover:bg-gray-700' : 'hover:bg-[#f3e5d0]'
+                      }`}
                       title="Xem chi tiết"
                     >
-                      <Eye className="h-4 w-4 text-[#4b2e1e]" />
+                      <Eye className={`h-4 w-4 ${isDark ? 'text-gray-300' : 'text-[#4b2e1e]'}`} />
                     </button>
                     <button
-                      className="p-2 rounded-full hover:bg-[#f3e5d0] transition-colors"
+                      className={`p-2 rounded-full transition-colors ${
+                        isDark ? 'hover:bg-gray-700' : 'hover:bg-[#f3e5d0]'
+                      }`}
                       title="Sửa"
                     >
-                      <Edit className="h-4 w-4 text-[#4b2e1e]" />
+                      <Edit className={`h-4 w-4 ${isDark ? 'text-gray-300' : 'text-[#4b2e1e]'}`} />
                     </button>
                     <button
-                      className="p-2 rounded-full hover:bg-red-100 transition-colors"
+                      className={`p-2 rounded-full transition-colors ${
+                        isDark ? 'hover:bg-red-900/50' : 'hover:bg-red-100'
+                      }`}
                       title="Xóa"
                     >
                       <Trash2 className="h-4 w-4 text-red-600" />
@@ -524,16 +690,28 @@ export default function RoomPage() {
 
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Sức chứa:</span>
-                    <span className="font-medium">{room.capacity} người</span>
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Sức chứa:
+                    </span>
+                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                      {room.capacity} người
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Diện tích:</span>
-                    <span className="font-medium">{room.size} m²</span>
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Diện tích:
+                    </span>
+                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+                      {room.size} m²
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Giá/đêm:</span>
-                    <span className="font-medium text-[#b68d40]">{formatCurrency(room.price)}</span>
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Giá/đêm:
+                    </span>
+                    <span className={`font-medium ${isDark ? 'text-blue-400' : 'text-[#b68d40]'}`}>
+                      {formatCurrency(room.price)}
+                    </span>
                   </div>
                 </div>
 
@@ -543,14 +721,18 @@ export default function RoomPage() {
                     {room.amenities.slice(0, 3).map(amenity => {
                       const IconComponent = getAmenityIcon(amenity);
                       return (
-                        <div key={amenity} className="flex items-center bg-[#f3e5d0] px-2 py-1 rounded-full text-xs">
+                        <div key={amenity} className={`flex items-center px-2 py-1 rounded-full text-xs ${
+                          isDark ? 'bg-gray-700 text-gray-300' : 'bg-[#f3e5d0] text-gray-700'
+                        }`}>
                           {IconComponent && <IconComponent className="h-3 w-3 mr-1" />}
                           {availableAmenities.find(a => a.key === amenity)?.label}
                         </div>
                       );
                     })}
                     {room.amenities.length > 3 && (
-                      <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
+                      <div className={`px-2 py-1 rounded-full text-xs ${
+                        isDark ? 'bg-gray-700 text-gray-400' : 'bg-gray-100 text-gray-600'
+                      }`}>
                         +{room.amenities.length - 3}
                       </div>
                     )}
@@ -565,12 +747,12 @@ export default function RoomPage() {
       {/* Modals */}
       {showAddModal && <AddRoomModal onClose={() => setShowAddModal(false)} />}
       {showDetailsModal && selectedRoom && (
-        <RoomDetailsModal 
-          room={selectedRoom} 
+        <RoomDetailsModal
+          room={selectedRoom}
           onClose={() => {
             setShowDetailsModal(false);
             setSelectedRoom(null);
-          }} 
+          }}
         />
       )}
 

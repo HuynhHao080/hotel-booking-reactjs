@@ -244,26 +244,37 @@ export default function Reports() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Revenue Chart */}
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-6">
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-6 animate-fadeInUp">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-bold text-[#4b2e1e]">Doanh thu theo tháng</h3>
-              <p className="text-gray-600 text-sm">Biểu đồ cột thể hiện doanh thu hàng tháng</p>
+              <p className="text-gray-600 text-sm">Biểu đồ đường thể hiện doanh thu hàng tháng</p>
             </div>
             <div className="flex gap-2">
-              <button className="p-2 rounded-lg hover:bg-gray-100">
+              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
                 <BarChart3 className="h-5 w-5 text-[#b68d40]" />
               </button>
-              <button className="p-2 rounded-lg hover:bg-gray-100">
+              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
                 <LineChart className="h-5 w-5 text-gray-400" />
               </button>
             </div>
           </div>
-          <ChartPlaceholder title="Biểu đồ doanh thu" height="h-64" />
+          <div className="h-64 bg-gradient-to-br from-[#f3e5d0] to-[#fdf8f3] rounded-2xl flex items-center justify-center border border-dashed border-[#d3b98e]/70 relative overflow-hidden">
+            <div className="text-center relative z-10">
+              <TrendingUp className="mx-auto h-8 w-8 text-[#b68d40] mb-2" />
+              <span className="text-[#6e4b33]/60 font-medium text-sm">Biểu đồ doanh thu</span>
+            </div>
+            {/* Animated background elements */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-4 left-4 w-16 h-16 bg-[#caa968] rounded-full animate-pulse"></div>
+              <div className="absolute top-8 right-8 w-12 h-12 bg-[#b68d40] rounded-full animate-pulse delay-300"></div>
+              <div className="absolute bottom-4 left-8 w-20 h-20 bg-[#d2b48c] rounded-full animate-pulse delay-700"></div>
+            </div>
+          </div>
         </div>
 
         {/* Occupancy Chart */}
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-6">
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-6 animate-fadeInUp delay-200">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-bold text-[#4b2e1e]">Tỷ lệ lấp đầy</h3>
@@ -271,7 +282,17 @@ export default function Reports() {
             </div>
             <PieChart className="h-8 w-8 text-[#b68d40]" />
           </div>
-          <ChartPlaceholder title="Biểu đồ tỷ lệ lấp đầy" height="h-64" />
+          <div className="h-64 bg-gradient-to-br from-[#f3e5d0] to-[#fdf8f3] rounded-2xl flex items-center justify-center border border-dashed border-[#d3b98e]/70 relative overflow-hidden">
+            <div className="text-center relative z-10">
+              <Activity className="mx-auto h-8 w-8 text-[#b68d40] mb-2" />
+              <span className="text-[#6e4b33]/60 font-medium text-sm">Biểu đồ tỷ lệ lấp đầy</span>
+            </div>
+            {/* Animated background elements */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-4 right-4 w-14 h-14 bg-[#caa968] rounded-full animate-pulse delay-500"></div>
+              <div className="absolute bottom-4 left-4 w-18 h-18 bg-[#b68d40] rounded-full animate-pulse delay-1000"></div>
+            </div>
+          </div>
         </div>
       </div>
 
