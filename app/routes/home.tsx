@@ -26,6 +26,12 @@ import {
   Search,
   Heart,
   Quote,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ZoomIn,
+  Grid,
+  Eye,
 } from "lucide-react";
 
 export default function Home() {
@@ -34,6 +40,22 @@ export default function Home() {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [guests, setGuests] = useState("2");
+
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Gallery images
+  const galleryImages = [
+    "/images/hotel-hero.jpg",
+    "/images/gallery1.jpg",
+    "/images/gallery2.jpg",
+    "/images/gallery3.jpg",
+    "/images/hotel-1.jpg",
+    "/images/hotel-2.jpg",
+    "/images/hotel-hero.jpg",
+    "/images/gallery1.jpg",
+  ];
 
   // Hero slides data
   const heroSlides = [
@@ -165,6 +187,40 @@ export default function Home() {
     return price.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " VNĐ";
   };
 
+  // Lightbox functions
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    document.body.style.overflow = 'unset';
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  };
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    if (!lightboxOpen) return;
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'ArrowRight') nextImage();
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [lightboxOpen]);
+
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
       isDark ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-[#f8f1e9] to-[#fff] text-gray-900'
@@ -248,12 +304,18 @@ export default function Home() {
                   Tìm phòng
                 </button>
               </form>
-              <div className="mt-4 text-center">
+              <div className="mt-4 text-center space-x-4">
                 <a
                   href="/booking"
-                  className="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 text-sm"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
                 >
                   🏨 Hệ thống đặt phòng chi tiết
+                </a>
+                <a
+                  href="/rooms"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                >
+                  🛏️ Xem tất cả phòng
                 </a>
               </div>
             </div>
@@ -307,6 +369,66 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Gallery Section */}
+      <section className={`py-20 px-8 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Thư Viện Hình Ảnh</h2>
+            <p className={`text-xl ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              Khám phá không gian và dịch vụ tại Paradise Hotel
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {galleryImages.map((image, index) => (
+              <div
+                key={index}
+                className={`relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer group ${
+                  isDark ? 'shadow-gray-900/50' : 'shadow-gray-200'
+                }`}
+                onClick={() => openLightbox(index)}
+              >
+                <div
+                  className="h-48 bg-cover bg-center relative"
+                  style={{ backgroundImage: `url('${image}')` }}
+                >
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className={`p-3 rounded-full ${isDark ? 'bg-white/20' : 'bg-black/20'}`}>
+                        <ZoomIn className="h-6 w-6 text-white" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className={`absolute bottom-2 left-2 px-2 py-1 rounded text-xs font-medium ${
+                  isDark ? 'bg-black/70 text-white' : 'bg-white/90 text-gray-800'
+                }`}>
+                  {index === 0 && "Sảnh chính"}
+                  {index === 1 && "Phòng Standard"}
+                  {index === 2 && "Phòng Deluxe"}
+                  {index === 3 && "Suite Executive"}
+                  {index === 4 && "Nhà hàng"}
+                  {index === 5 && "Hồ bơi"}
+                  {index === 6 && "Spa"}
+                  {index === 7 && "Phòng gym"}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <button className={`inline-flex items-center px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+              isDark
+                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white'
+            }`}>
+              <Grid className="h-5 w-5 mr-2" />
+              Xem tất cả hình ảnh
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Room Types Section */}
       <section className={`py-20 px-8 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <div className="max-w-6xl mx-auto">
@@ -355,10 +477,18 @@ export default function Home() {
                       </div>
                     ))}
                   </div>
-                  <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Đặt ngay
-                  </button>
+                  <div className="flex gap-2">
+                    <button className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Đặt ngay
+                    </button>
+                    <Link
+                      to="/booking"
+                      className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 flex items-center justify-center text-sm"
+                    >
+                      🏨 Đặt online
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
@@ -559,6 +689,63 @@ export default function Home() {
         .animate-fadeInUp.delay-400 { animation-delay: 0.4s; }
         .animate-fadeInUp.delay-600 { animation-delay: 0.6s; }
       `}</style>
+
+      {/* Lightbox Modal */}
+      {lightboxOpen && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center">
+          <div className="relative max-w-7xl max-h-screen mx-4">
+            {/* Close button */}
+            <button
+              onClick={closeLightbox}
+              className="absolute top-4 right-4 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors duration-300"
+            >
+              <X className="h-6 w-6" />
+            </button>
+
+            {/* Previous button */}
+            <button
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors duration-300"
+            >
+              <ChevronLeft className="h-8 w-8" />
+            </button>
+
+            {/* Next button */}
+            <button
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors duration-300"
+            >
+              <ChevronRight className="h-8 w-8" />
+            </button>
+
+            {/* Main image */}
+            <div className="bg-white rounded-lg overflow-hidden">
+              <img
+                src={galleryImages[currentImageIndex]}
+                alt={`Gallery image ${currentImageIndex + 1}`}
+                className="max-w-full max-h-[80vh] object-contain"
+              />
+            </div>
+
+            {/* Image counter */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full text-sm">
+              {currentImageIndex + 1} / {galleryImages.length}
+            </div>
+
+            {/* Image caption */}
+            <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-lg text-sm max-w-md text-center">
+              {currentImageIndex === 0 && "Sảnh chính - Không gian sang trọng và chuyên nghiệp"}
+              {currentImageIndex === 1 && "Phòng Standard - Thiết kế hiện đại và tiện nghi"}
+              {currentImageIndex === 2 && "Phòng Deluxe - Không gian rộng rãi và thoải mái"}
+              {currentImageIndex === 3 && "Suite Executive - Sự lựa chọn hoàn hảo cho doanh nhân"}
+              {currentImageIndex === 4 && "Nhà hàng - Ẩm thực đa dạng và chất lượng"}
+              {currentImageIndex === 5 && "Hồ bơi - Không gian thư giãn tuyệt vời"}
+              {currentImageIndex === 6 && "Spa - Trải nghiệm chăm sóc sức khỏe chuyên nghiệp"}
+              {currentImageIndex === 7 && "Phòng gym - Trang thiết bị hiện đại"}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

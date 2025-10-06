@@ -64,7 +64,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 } ${isSidebarCollapsed ? "justify-center px-4" : ""}`}
                 title={isSidebarCollapsed ? link.label : ""}
               >
-                <link.icon className="w-6 h-6 mr-4" />
+                <link.icon className={`w-6 h-6 ${isSidebarCollapsed ? "" : "mr-4"}`} />
                 {!isSidebarCollapsed && <span className="font-medium">{link.label}</span>}
               </Link>
             ))}

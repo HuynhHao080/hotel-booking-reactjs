@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { 
+import { Link } from "react-router-dom";
+import {
   BedDouble, PlusCircle, Trash2, Search, Filter, Edit, Eye,
   Wifi, Car, Utensils, Dumbbell, Waves, Coffee, Users,
   Calendar, DollarSign, MapPin
@@ -444,12 +445,20 @@ export default function RoomPage() {
             ))}
           </select>
           
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center px-6 py-3 bg-gradient-to-r from-[#caa968] to-[#e4cfa3] text-[#4b2e1e] font-semibold rounded-2xl shadow-md hover:shadow-xl hover:from-[#b68d40] hover:to-[#d6b77a] transition-all duration-300"
-          >
-            <PlusCircle className="mr-2 h-5 w-5" /> Thêm phòng
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="flex items-center px-6 py-3 bg-gradient-to-r from-[#caa968] to-[#e4cfa3] text-[#4b2e1e] font-semibold rounded-2xl shadow-md hover:shadow-xl hover:from-[#b68d40] hover:to-[#d6b77a] transition-all duration-300"
+            >
+              <PlusCircle className="mr-2 h-5 w-5" /> Thêm phòng
+            </button>
+            <Link
+              to="/booking"
+              className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-2xl shadow-md hover:shadow-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300"
+            >
+              🏨 Đặt phòng ngay
+            </Link>
+          </div>
         </div>
       </div>
 

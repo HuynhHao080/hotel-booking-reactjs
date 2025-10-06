@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { 
-  Settings as SettingsIcon, Save, User, Lock, Bell, 
+import {
+  Settings as SettingsIcon, Save, User, Lock, Bell,
   Palette, Globe, Shield, Database, Mail, Phone,
   MapPin, CreditCard, Clock, Monitor, Smartphone,
-  Sun, Moon, Eye, EyeOff, Check, X
+  Sun, Moon, Eye, EyeOff, Check, X, AlertCircle
 } from "lucide-react";
+import authService from "../services/authService";
 
 interface SettingsSection {
   id: string;
@@ -27,6 +28,7 @@ export default function Settings() {
   const [activeSection, setActiveSection] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const [settings, setSettings] = useState({
     profile: {
@@ -290,11 +292,61 @@ export default function Settings() {
 
   const handleSave = async (sectionId: string) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    // In real app, this would save to backend
-    console.log(`Saving settings for ${sectionId}:`, settings[sectionId as keyof typeof settings]);
+    setMessage(null);
+
+    try {
+      if (sectionId === 'security') {
+        // Xử lý đặc biệt cho section bảo mật (đổi mật khẩu)
+        const { currentPassword, newPassword, confirmPassword } = settings.security;
+
+        // Validate mật khẩu
+        if (!currentPassword) {
+          throw new Error("Vui lòng nhập mật khẩu hiện tại");
+        }
+
+        if (!newPassword) {
+          throw new Error("Vui lòng nhập mật khẩu mới");
+        }
+
+        if (newPassword !== confirmPassword) {
+          throw new Error("Mật khẩu xác nhận không khớp");
+        }
+
+        if (newPassword.length < 8) {
+          throw new Error("Mật khẩu mới phải có ít nhất 8 ký tự");
+        }
+
+        // Đổi mật khẩu
+        await authService.changePassword(currentPassword, newPassword);
+
+        // Reset form và hiển thị thông báo thành công
+        setSettings(prev => ({
+          ...prev,
+          security: {
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+            twoFactorEnabled: prev.security.twoFactorEnabled,
+            sessionTimeout: prev.security.sessionTimeout
+          }
+        }));
+
+        setMessage({ type: 'success', text: 'Đổi mật khẩu thành công!' });
+
+      } else {
+        // Xử lý các section khác như bình thường
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setMessage({ type: 'success', text: 'Lưu cài đặt thành công!' });
+      }
+
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Có lỗi xảy ra'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renderSettingInput = (setting: SettingItem, sectionId: string) => {
@@ -434,6 +486,22 @@ export default function Settings() {
         <div className="lg:col-span-3">
           {currentSection && (
             <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-6">
+              {/* Thông báo lỗi/thành công */}
+              {message && (
+                <div className={`mb-6 p-4 rounded-lg flex items-center ${
+                  message.type === 'success'
+                    ? 'bg-green-100 border border-green-300 text-green-700'
+                    : 'bg-red-100 border border-red-300 text-red-700'
+                }`}>
+                  {message.type === 'success' ? (
+                    <Check className="h-5 w-5 mr-2" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 mr-2" />
+                  )}
+                  {message.text}
+                </div>
+              )}
+
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-bold text-[#4b2e1e]">{currentSection.title}</h2>

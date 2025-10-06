@@ -1,13 +1,29 @@
 import { useState } from "react";
 import { LogIn } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function FormLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login info:", { email, password });
+
+    // 🧠 Giả lập API login
+    // Thực tế bạn sẽ gọi axios.post("/api/login", { email, password })
+    const fakeUser = {
+      name: "Nguyễn Văn A",
+      email,
+      avatar: "https://i.pravatar.cc/100?img=12", // avatar mẫu
+    };
+
+    // ✅ Lưu thông tin vào localStorage
+    localStorage.setItem("user", JSON.stringify(fakeUser));
+    localStorage.setItem("token", "fake_jwt_token");
+
+    // 🧭 Điều hướng về trang chủ
+    navigate("/");
   };
 
   return (
@@ -15,10 +31,8 @@ export default function FormLogin() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
       style={{ backgroundImage: "url('/images/hotel-hero.jpg')" }}
     >
-      {/* Overlay mờ cho dễ nhìn */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* Form */}
       <form
         onSubmit={handleSubmit}
         className="relative z-10 bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-lg w-full max-w-md"

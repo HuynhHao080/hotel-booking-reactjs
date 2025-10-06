@@ -25,6 +25,18 @@ import {
   Share2,
   ChevronLeft,
   ChevronRight,
+  ArrowRight,
+  Zap,
+  Gift,
+  Percent,
+  Award,
+  ThumbsUp,
+  Truck,
+  Coffee,
+  Bath,
+  Tv,
+  Wind,
+  BedDouble,
 } from "lucide-react";
 
 interface BookingSystemProps {
@@ -185,86 +197,139 @@ export default function BookingSystem({ onBookingComplete }: BookingSystemProps)
   };
 
   const renderStep1 = () => (
-    <div className={`max-w-2xl mx-auto p-8 rounded-xl shadow-lg transition-colors duration-300 ${
-      isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-    }`}>
-      <h2 className="text-2xl font-bold mb-6 text-center">Tìm Phòng Nghỉ</h2>
+    <div className="max-w-4xl mx-auto">
+      {/* Hero Section */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Đặt Phòng Nhanh Chóng
+        </h1>
+        <p className={`text-xl ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+          Tìm và đặt phòng khách sạn với giá tốt nhất
+        </p>
+      </div>
 
-      <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Ngày nhận phòng</label>
-            <input
-              type="date"
-              value={searchFilters.checkInDate}
-              onChange={(e) => setSearchFilters(prev => ({ ...prev, checkInDate: e.target.value }))}
-              className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
-                isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
-              }`}
-              required
-            />
+      {/* Search Form */}
+      <div className={`p-8 rounded-2xl shadow-2xl transition-colors duration-300 ${
+        isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
+      }`}>
+        <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="space-y-6">
+          {/* Date Selection */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="flex items-center text-sm font-medium">
+                <Calendar className="h-4 w-4 mr-2 text-blue-500" />
+                Ngày nhận phòng
+              </label>
+              <input
+                type="date"
+                value={searchFilters.checkInDate}
+                onChange={(e) => setSearchFilters(prev => ({ ...prev, checkInDate: e.target.value }))}
+                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
+                  isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
+                }`}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="flex items-center text-sm font-medium">
+                <Calendar className="h-4 w-4 mr-2 text-purple-500" />
+                Ngày trả phòng
+              </label>
+              <input
+                type="date"
+                value={searchFilters.checkOutDate}
+                onChange={(e) => setSearchFilters(prev => ({ ...prev, checkOutDate: e.target.value }))}
+                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-300 ${
+                  isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
+                }`}
+                required
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">Ngày trả phòng</label>
-            <input
-              type="date"
-              value={searchFilters.checkOutDate}
-              onChange={(e) => setSearchFilters(prev => ({ ...prev, checkOutDate: e.target.value }))}
-              className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
-                isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
-              }`}
-              required
-            />
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Số khách</label>
-            <select
-              value={searchFilters.guests}
-              onChange={(e) => setSearchFilters(prev => ({ ...prev, guests: e.target.value }))}
-              className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
-                isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
-              }`}
-            >
-              <option value="1">1 khách</option>
-              <option value="2">2 khách</option>
-              <option value="3">3 khách</option>
-              <option value="4">4 khách</option>
-              <option value="5">5+ khách</option>
-            </select>
+          {/* Guests and Room Type */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="flex items-center text-sm font-medium">
+                <Users className="h-4 w-4 mr-2 text-green-500" />
+                Số khách
+              </label>
+              <select
+                value={searchFilters.guests}
+                onChange={(e) => setSearchFilters(prev => ({ ...prev, guests: e.target.value }))}
+                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-300 ${
+                  isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
+                }`}
+              >
+                <option value="1">1 khách</option>
+                <option value="2">2 khách</option>
+                <option value="3">3 khách</option>
+                <option value="4">4 khách</option>
+                <option value="5">5+ khách</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="flex items-center text-sm font-medium">
+                <BedDouble className="h-4 w-4 mr-2 text-orange-500" />
+                Loại phòng
+              </label>
+              <select
+                value={searchFilters.roomType}
+                onChange={(e) => setSearchFilters(prev => ({ ...prev, roomType: e.target.value }))}
+                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors duration-300 ${
+                  isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
+                }`}
+              >
+                <option value="all">Tất cả loại phòng</option>
+                <option value="standard">Standard</option>
+                <option value="deluxe">Deluxe</option>
+                <option value="suite">Suite</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">Loại phòng</label>
-            <select
-              value={searchFilters.roomType}
-              onChange={(e) => setSearchFilters(prev => ({ ...prev, roomType: e.target.value }))}
-              className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
-                isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
-              }`}
-            >
-              <option value="all">Tất cả loại phòng</option>
-              <option value="standard">Standard</option>
-              <option value="deluxe">Deluxe</option>
-              <option value="suite">Suite</option>
-            </select>
-          </div>
-        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-        >
-          {loading ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-          ) : (
-            <Search className="h-5 w-5 mr-2" />
-          )}
-          {loading ? 'Đang tìm phòng...' : 'Tìm phòng có sẵn'}
-        </button>
-      </form>
+          {/* Promotional Banner */}
+          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 rounded-xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Gift className="h-5 w-5 mr-2" />
+                <span className="font-medium">Ưu đãi đặc biệt: Giảm 20% cho đặt phòng trước 7 ngày!</span>
+              </div>
+              <span className="text-sm opacity-90">Hạn đến: 31/12/2024</span>
+            </div>
+          </div>
+
+          {/* Search Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-4 rounded-xl hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-lg font-semibold shadow-lg"
+          >
+            {loading ? (
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+            ) : (
+              <Zap className="h-6 w-6 mr-3" />
+            )}
+            {loading ? 'Đang tìm phòng...' : '🔍 Tìm Phòng Tốt Nhất'}
+          </button>
+
+          {/* Trust Indicators */}
+          <div className="flex justify-center items-center space-x-6 text-sm text-gray-500">
+            <div className="flex items-center">
+              <Shield className="h-4 w-4 mr-1 text-green-500" />
+              <span>Bảo mật 100%</span>
+            </div>
+            <div className="flex items-center">
+              <ThumbsUp className="h-4 w-4 mr-1 text-blue-500" />
+              <span>Hủy miễn phí</span>
+            </div>
+            <div className="flex items-center">
+              <Award className="h-4 w-4 mr-1 text-yellow-500" />
+              <span>Đảm bảo giá tốt</span>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 
