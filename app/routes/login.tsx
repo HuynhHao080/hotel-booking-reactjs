@@ -1,10 +1,11 @@
 import { useNavigate, Link } from "react-router-dom";
 import { LogIn, AlertCircle } from "lucide-react";
 import { useState } from "react";
-import authService from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -19,11 +20,15 @@ export default function Login() {
       const email = (formData.get('email') as string) || '';
       const password = (formData.get('password') as string) || '';
 
-      // Gọi auth service để đăng nhập
-      await authService.login(email, password);
+      // Gọi auth context để đăng nhập
+      const success = await login(email, password);
 
-      // Điều hướng đến dashboard nếu thành công
-      navigate("/dashboard");
+      if (success) {
+        // Điều hướng dựa trên role
+        navigate("/dashboard");
+      } else {
+        setError("Đăng nhập thất bại. Vui lòng kiểm tra email và mật khẩu.");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng nhập thất bại");
     } finally {

@@ -1,37 +1,46 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUI } from "../contexts/UIContext";
+import { useAuth } from "../contexts/AuthContext";
 import Header from "../components/Header";
 import BookingSystem from "../components/BookingSystem";
+import EnhancedSearch from "../components/EnhancedSearch";
 import {
   Bed,
-  FileText,
-  Settings,
-  Users,
   Star,
   MapPin,
-  Phone,
-  Mail,
   Wifi,
   Car,
   Utensils,
   Dumbbell,
   Waves,
-  Shield,
-  Clock,
   CheckCircle,
-  ArrowRight,
-  Calendar,
-  User,
   Search,
+  Filter,
   Heart,
-  Quote,
-  X,
+  Share2,
+  Calendar,
+  Users,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ZoomIn,
   Grid,
   Eye,
+  Award,
+  Coffee,
+  Bath,
+  Tv,
+  Wind,
+  Camera,
+  Palette,
+  Zap,
+  Shield,
+  Quote,
+  Phone,
+  Mail,
+  Clock,
+  X,
 } from "lucide-react";
 
 export default function Home() {
@@ -306,16 +315,22 @@ export default function Home() {
               </form>
               <div className="mt-4 text-center space-x-4">
                 <a
+                  href="/demo"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                >
+                  👑 Trải nghiệm hệ thống phân quyền
+                </a>
+                <a
+                  href="/hotels"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                >
+                  🏨 Khám phá khách sạn (Phong cách Booking.com)
+                </a>
+                <a
                   href="/booking"
                   className="inline-block px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
                 >
                   🏨 Hệ thống đặt phòng chi tiết
-                </a>
-                <a
-                  href="/rooms"
-                  className="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
-                >
-                  🛏️ Xem tất cả phòng
                 </a>
               </div>
             </div>
@@ -649,6 +664,7 @@ export default function Home() {
             <div>
               <h4 className="font-bold mb-4">Dịch vụ</h4>
               <ul className={`space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-400'}`}>
+                <li><Link to="/hotels" className="hover:text-blue-500 transition-colors">Khách sạn</Link></li>
                 <li><Link to="/rooms" className="hover:text-blue-500 transition-colors">Phòng nghỉ</Link></li>
                 <li><Link to="/restaurants" className="hover:text-blue-500 transition-colors">Nhà hàng</Link></li>
                 <li><Link to="/spa" className="hover:text-blue-500 transition-colors">Spa & Wellness</Link></li>
@@ -658,6 +674,7 @@ export default function Home() {
             <div>
               <h4 className="font-bold mb-4">Hỗ trợ</h4>
               <ul className={`space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-400'}`}>
+                <li><Link to="/demo" className="hover:text-blue-500 transition-colors">Hướng dẫn phân quyền</Link></li>
                 <li><Link to="/contact" className="hover:text-blue-500 transition-colors">Liên hệ</Link></li>
                 <li><Link to="/faq" className="hover:text-blue-500 transition-colors">FAQ</Link></li>
                 <li><Link to="/booking" className="hover:text-blue-500 transition-colors">Đặt phòng</Link></li>

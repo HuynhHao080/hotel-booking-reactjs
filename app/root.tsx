@@ -9,6 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import { UIProvider } from "./contexts/UIContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -47,9 +48,11 @@ import LayoutComponent from "./routes/Layout";
 export default function App() {
   return (
     <UIProvider>
-      <LayoutComponent>
-        <Outlet />
-      </LayoutComponent>
+      <AuthProvider>
+        <LayoutComponent>
+          <Outlet />
+        </LayoutComponent>
+      </AuthProvider>
     </UIProvider>
   );
 }

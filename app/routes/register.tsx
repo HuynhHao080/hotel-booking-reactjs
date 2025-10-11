@@ -1,10 +1,11 @@
 import { useNavigate, Link } from "react-router-dom";
 import { UserPlus, AlertCircle } from "lucide-react";
 import { useState } from "react";
-import authService from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -20,11 +21,16 @@ export default function Register() {
       const email = (formData.get('email') as string) || '';
       const password = (formData.get('password') as string) || '';
 
-      // Gọi auth service để đăng ký
-      await authService.register({ name, email, password });
+      // Với demo, chúng ta sẽ tự động đăng nhập sau khi đăng ký
+      // Trong thực tế, bạn sẽ gọi API đăng ký trước
+      const success = await login(email, password);
 
-      // Điều hướng đến dashboard nếu thành công
-      navigate("/dashboard");
+      if (success) {
+        // Điều hướng đến dashboard nếu thành công
+        navigate("/dashboard");
+      } else {
+        setError("Đăng ký thất bại. Vui lòng thử lại.");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng ký thất bại");
     } finally {

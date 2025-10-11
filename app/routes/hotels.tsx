@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import {
   Plus, Trash2, Hotel, Search, Filter, Edit, Eye, MapPin,
   Star, Wifi, Car, Utensils, Waves, Phone, Mail, Calendar,
-  Users, Bed, DollarSign, Navigation, Camera, Coffee
+  Users, Bed, DollarSign, Navigation, Camera, Coffee, Grid, List
 } from "lucide-react";
+import EnhancedSearch from "../components/EnhancedSearch";
+import EnhancedHotelCard from "../components/EnhancedHotelCard";
 
 interface Hotel {
   id: number;
@@ -80,6 +82,52 @@ export default function Hotels() {
       checkOutTime: "11:00",
       policies: ["Không hút thuốc", "Không thú cưng", "Hủy miễn phí trước 48h"],
       status: "active"
+    },
+    {
+      id: 3,
+      name: "Seaside Resort & Spa",
+      description: "Khu nghỉ dưỡng bên biển với spa cao cấp và dịch vụ hoàn hảo",
+      address: "789 Trần Phú",
+      city: "Nha Trang",
+      country: "Việt Nam",
+      rating: 4.9,
+      totalRooms: 200,
+      availableRooms: 75,
+      priceRange: { min: 3000000, max: 12000000 },
+      amenities: ["wifi", "pool", "spa", "restaurant", "gym", "beach"],
+      images: ["/images/hotel-hero.jpg", "/images/gallery1.jpg", "/images/gallery2.jpg"],
+      contact: {
+        phone: "0258 3822 999",
+        email: "info@seasideresort.com",
+        website: "www.seasideresort.com"
+      },
+      checkInTime: "14:00",
+      checkOutTime: "12:00",
+      policies: ["Không hút thuốc", "Thú cưng được cho phép", "Hủy miễn phí trước 48h"],
+      status: "active"
+    },
+    {
+      id: 4,
+      name: "Mountain View Hotel",
+      description: "Khách sạn trên núi với tầm nhìn tuyệt đẹp và không khí trong lành",
+      address: "321 Hoàng Hoa Thám",
+      city: "Đà Lạt",
+      country: "Việt Nam",
+      rating: 4.7,
+      totalRooms: 60,
+      availableRooms: 30,
+      priceRange: { min: 800000, max: 2500000 },
+      amenities: ["wifi", "restaurant", "fireplace", "garden"],
+      images: ["/images/hotel-1.jpg", "/images/hotel-2.jpg"],
+      contact: {
+        phone: "0263 3822 555",
+        email: "info@mountainview.com",
+        website: "www.mountainview.com"
+      },
+      checkInTime: "13:00",
+      checkOutTime: "11:00",
+      policies: ["Không hút thuốc trong phòng", "Không thú cưng", "Hủy miễn phí trước 24h"],
+      status: "active"
     }
   ]);
 
@@ -89,6 +137,7 @@ export default function Hotels() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Form states for adding/editing
   const [formData, setFormData] = useState<Partial<Hotel>>({
@@ -550,108 +599,69 @@ export default function Hotels() {
           <p className="text-gray-400">Hãy thêm khách sạn mới hoặc điều chỉnh bộ lọc</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredHotels.map((hotel, i) => (
-            <div
-              key={hotel.id}
-              className="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp group"
-              style={{ animationDelay: `${i * 0.1}s` }}
-            >
-              {/* Hotel Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={hotel.images[0] || "/images/hotel-placeholder.jpg"}
-                  alt={hotel.name}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/images/hotel-placeholder.jpg";
+        <>
+          {/* Results Header */}
+          <div className="flex justify-between items-center mb-6">
+            <div className="text-gray-600">
+              <span className="font-medium">{filteredHotels.length}</span> khách sạn được tìm thấy
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Xem:</span>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-lg ${
+                  viewMode === 'grid'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                }`}
+              >
+                <Grid className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-lg ${
+                  viewMode === 'list'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                }`}
+              >
+                <List className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className={`grid gap-6 ${
+            viewMode === 'grid'
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+              : 'grid-cols-1'
+          }`}>
+            {filteredHotels.map((hotel, i) => (
+              <div key={hotel.id} style={{ animationDelay: `${i * 0.1}s` }}>
+                <EnhancedHotelCard
+                  hotel={{
+                    id: hotel.id,
+                    name: hotel.name,
+                    rating: hotel.rating,
+                    reviewCount: Math.floor(Math.random() * 500) + 50,
+                    location: `${hotel.city}, ${hotel.country}`,
+                    distance: `${Math.floor(Math.random() * 5) + 1} km từ trung tâm`,
+                    images: hotel.images,
+                    price: hotel.priceRange.min,
+                    originalPrice: hotel.priceRange.min > 1500000 ? hotel.priceRange.min * 1.2 : undefined,
+                    deal: Math.random() > 0.7 ? "Giảm giá 20%" : undefined,
+                    amenities: hotel.amenities,
+                    description: hotel.description,
+                    isFavorite: false
+                  }}
+                  onViewDetails={(hotelData) => {
+                    setSelectedHotel(hotel);
+                    setShowDetailsModal(true);
                   }}
                 />
-                <div className="absolute top-4 right-4">
-                  <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(hotel.status)}`}>
-                    {getStatusText(hotel.status)}
-                  </span>
-                </div>
-                <div className="absolute top-4 left-4">
-                  <div className="flex items-center bg-white/90 px-2 py-1 rounded-full">
-                    <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
-                    <span className="text-sm font-medium">{hotel.rating}</span>
-                  </div>
-                </div>
               </div>
-
-              {/* Hotel Info */}
-              <div className="p-5">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-[#4b2e1e] mb-1">{hotel.name}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{hotel.city}, {hotel.country}</p>
-                    <p className="text-sm text-gray-500 line-clamp-2">{hotel.description}</p>
-                  </div>
-                  <div className="flex gap-1 ml-2">
-                    <button
-                      onClick={() => {
-                        setSelectedHotel(hotel);
-                        setShowDetailsModal(true);
-                      }}
-                      className="p-2 rounded-full hover:bg-[#f3e5d0] transition-colors"
-                      title="Xem chi tiết"
-                    >
-                      <Eye className="h-4 w-4 text-[#4b2e1e]" />
-                    </button>
-                    <button
-                      className="p-2 rounded-full hover:bg-[#f3e5d0] transition-colors"
-                      title="Sửa"
-                    >
-                      <Edit className="h-4 w-4 text-[#4b2e1e]" />
-                    </button>
-                    <button
-                      className="p-2 rounded-full hover:bg-red-100 transition-colors"
-                      title="Xóa"
-                    >
-                      <Trash2 className="h-4 w-4 text-red-600" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="space-y-3 mb-4">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Phòng:</span>
-                    <span className="font-medium">{hotel.availableRooms}/{hotel.totalRooms} trống</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Giá từ:</span>
-                    <span className="font-medium text-[#b68d40]">{formatCurrency(hotel.priceRange.min)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Check-in:</span>
-                    <span className="font-medium">{hotel.checkInTime}</span>
-                  </div>
-                </div>
-
-                {/* Amenities */}
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-1">
-                    {hotel.amenities.slice(0, 4).map(amenity => {
-                      const IconComponent = getAmenityIcon(amenity);
-                      return (
-                        <div key={amenity} className="flex items-center bg-[#f3e5d0] px-2 py-1 rounded-full text-xs">
-                          {IconComponent && <IconComponent className="h-3 w-3 mr-1" />}
-                          {availableAmenities.find(a => a.key === amenity)?.label}
-                        </div>
-                      );
-                    })}
-                    {hotel.amenities.length > 4 && (
-                      <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
-                        +{hotel.amenities.length - 4}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* Modals */}
