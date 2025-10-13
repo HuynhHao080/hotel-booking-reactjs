@@ -1,17 +1,17 @@
 import React from 'react';
-import { Dashboard } from '../components/Dashboard';
+import { HotelManagement } from '../components/HotelManagement';
 import { useAuth } from '../contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 
-export default function DashboardPage() {
-  const { isAuthenticated, canAccessAdminPanel } = useAuth();
+export default function HotelsManagePage() {
+  const { isAuthenticated, canManageHotels } = useAuth();
 
   // Kiểm tra quyền truy cập
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!canAccessAdminPanel) {
+  if (!canManageHotels) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -28,5 +28,5 @@ export default function DashboardPage() {
     );
   }
 
-  return <Dashboard />;
+  return <HotelManagement />;
 }

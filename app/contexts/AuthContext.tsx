@@ -16,6 +16,11 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   isCustomer: boolean;
+  hasPermission: (permission: string) => boolean;
+  canAccessAdminPanel: boolean;
+  canManageHotels: boolean;
+  canManageCustomers: boolean;
+  canViewReports: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -96,13 +101,53 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem("currentUser");
   };
 
+  // Các quyền truy cập admin
+  const isAdmin = user?.role === "admin";
+  const isCustomer = user?.role === "customer";
+
+  // Hàm kiểm tra quyền cụ thể
+  const hasPermission = (permission: string): boolean => {
+    if (!user) return false;
+
+    const permissions: Record<string, string[]> = {
+      admin: [
+        'dashboard.view',
+        'hotels.manage',
+        'customers.manage',
+        'bookings.manage',
+        'reports.view',
+        'system.manage',
+        'users.manage'
+      ],
+      customer: [
+        'booking.create',
+        'booking.view_own',
+        'profile.view',
+        'profile.edit'
+      ]
+    };
+
+    return permissions[user.role]?.includes(permission) || false;
+  };
+
+  // Các quyền truy cập admin
+  const canAccessAdminPanel = isAdmin;
+  const canManageHotels = hasPermission('hotels.manage');
+  const canManageCustomers = hasPermission('customers.manage');
+  const canViewReports = hasPermission('reports.view');
+
   const value: AuthContextType = {
     user,
     login,
     logout,
     isAuthenticated: !!user,
     isAdmin: user?.role === "admin",
-    isCustomer: user?.role === "customer"
+    isCustomer: user?.role === "customer",
+    hasPermission,
+    canAccessAdminPanel,
+    canManageHotels,
+    canManageCustomers,
+    canViewReports
   };
 
   return (

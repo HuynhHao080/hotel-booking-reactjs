@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function Header() {
   const { isSidebarCollapsed, toggleSidebar } = useUI();
-  const { isAuthenticated, isAdmin, isCustomer, user, logout } = useAuth();
+  const { isAuthenticated, isAdmin, isCustomer, user, logout, canAccessAdminPanel, canManageHotels, canManageCustomers } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -134,14 +134,37 @@ export default function Header() {
                     <User className="w-4 h-4" /> Thông tin cá nhân
                   </Link>
 
-                  {isAdmin && (
-                    <Link
-                      to="/dashboard"
-                      className="flex items-center gap-2 px-4 py-2 text-[#5a3e2b] dark:text-gray-200 hover:bg-[#f9f4e6] dark:hover:bg-gray-700 transition-all duration-300"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <Users className="w-4 h-4" /> Quản lý hệ thống
-                    </Link>
+                  {/* Menu quản lý chỉ dành cho Admin */}
+                  {canAccessAdminPanel && (
+                    <>
+                      <Link
+                        to="/dashboard"
+                        className="flex items-center gap-2 px-4 py-2 text-[#5a3e2b] dark:text-gray-200 hover:bg-[#f9f4e6] dark:hover:bg-gray-700 transition-all duration-300"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <Users className="w-4 h-4" /> Dashboard quản lý
+                      </Link>
+
+                      {canManageHotels && (
+                        <Link
+                          to="/hotels/manage"
+                          className="flex items-center gap-2 px-4 py-2 text-[#5a3e2b] dark:text-gray-200 hover:bg-[#f9f4e6] dark:hover:bg-gray-700 transition-all duration-300"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          🏨 Quản lý khách sạn
+                        </Link>
+                      )}
+
+                      {canManageCustomers && (
+                        <Link
+                          to="/customers/manage"
+                          className="flex items-center gap-2 px-4 py-2 text-[#5a3e2b] dark:text-gray-200 hover:bg-[#f9f4e6] dark:hover:bg-gray-700 transition-all duration-300"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          👥 Quản lý khách hàng
+                        </Link>
+                      )}
+                    </>
                   )}
 
                   <button

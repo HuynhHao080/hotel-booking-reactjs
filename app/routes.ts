@@ -12,6 +12,7 @@ export default [
 
   // route `/hotels`
   route("hotels", "routes/hotels-new.tsx"),
+  route("hotels/manage", "routes/hotels-manage.tsx"),
   route("booking", "routes/booking.tsx"),  // Route `/booking`
   route("booking/all", "routes/booking-all.tsx"),  // Route `/booking/all`
   route("booking/manage", "routes/booking-manage.tsx"),  // Route `/booking/manage`
@@ -22,6 +23,7 @@ export default [
   route('settings', 'routes/settings.tsx'),  // Route `/settings`
   route('staff', 'routes/staff.tsx'),  // Route `/staff`
   route('customers', 'routes/customers.tsx'),  // Route `/customers`
+  route('customers/manage', 'routes/customers-manage.tsx'),  // Route `/customers/manage`
 
   // auth routes
   route("login", "routes/login.tsx"),

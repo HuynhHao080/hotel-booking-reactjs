@@ -1,4 +1,18 @@
-// Booking Service - Tương thích với backend API
+import type {
+  Booking,
+  Customer,
+  Room,
+  CreateBookingRequest,
+  CreateCustomerRequest,
+  ApiResponse,
+  PaginatedResponse,
+  DashboardStats,
+  BookingReport,
+  RoomType
+} from '../types/database';
+import { BookingStatus, RoomStatus } from '../types/database';
+
+// Booking Service - Updated to use database types
 export interface BookingRequest {
   checkInDate: string;
   checkOutDate: string;
@@ -12,8 +26,7 @@ export interface BookingRequest {
   };
 }
 
-export interface Room {
-  id: string;
+export interface RoomWithDetails extends Room {
   type: string;
   name: string;
   price: number;
@@ -23,82 +36,125 @@ export interface Room {
   images: string[];
   available: boolean;
   maxGuests: number;
+  roomType?: RoomType;
 }
 
-export interface Booking {
-  id: string;
-  roomId: string;
+export interface BookingWithDetails extends Booking {
+  customer?: Customer;
+  rooms?: Room[];
   customerName: string;
   checkInDate: string;
   checkOutDate: string;
   guests: number;
   totalAmount: number;
-  status: 'pending' | 'confirmed' | 'checked-in' | 'checked-out' | 'cancelled';
+  status: BookingStatus;
   createdAt: string;
 }
 
 // Mock data - sẽ được thay thế bằng API calls thực tế
+const mockRoomTypes: RoomType[] = [
+  {
+    id: 1,
+    name: "Standard",
+    max_guests: 2,
+    price: 500000,
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: 2,
+    name: "Deluxe",
+    max_guests: 2,
+    price: 800000,
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: 3,
+    name: "Suite",
+    max_guests: 4,
+    price: 1500000,
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z"
+  }
+];
+
 const mockRooms: Room[] = [
   {
-    id: "room-001",
-    type: "standard",
-    name: "Phòng Standard",
-    price: 500000,
-    size: "25m²",
-    beds: "1 giường đôi",
-    amenities: ["WiFi miễn phí", "TV 42 inch", "Minibar"],
-    images: ["/images/gallery1.jpg"],
-    available: true,
-    maxGuests: 2
+    id: 1,
+    number: "101",
+    floor: 1,
+    hotel_id: 1,
+    type_id: 1,
+    status: RoomStatus.AVAILABLE,
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z"
   },
   {
-    id: "room-002",
-    type: "deluxe",
-    name: "Phòng Deluxe",
-    price: 800000,
-    size: "35m²",
-    beds: "1 giường king",
-    amenities: ["WiFi miễn phí", "TV 50 inch", "Ban công", "Bồn tắm"],
-    images: ["/images/gallery2.jpg"],
-    available: true,
-    maxGuests: 2
+    id: 2,
+    number: "201",
+    floor: 2,
+    hotel_id: 1,
+    type_id: 2,
+    status: RoomStatus.AVAILABLE,
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z"
   },
   {
-    id: "room-003",
-    type: "suite",
-    name: "Suite Executive",
-    price: 1500000,
-    size: "50m²",
-    beds: "1 giường king + sofa",
-    amenities: ["WiFi miễn phí", "TV 55 inch", "Phòng khách", "Bồn tắm + vòi sen"],
-    images: ["/images/gallery3.jpg"],
-    available: false,
-    maxGuests: 4
+    id: 3,
+    number: "301",
+    floor: 3,
+    hotel_id: 1,
+    type_id: 3,
+    status: RoomStatus.OCCUPIED,
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z"
+  }
+];
+
+const mockCustomers: Customer[] = [
+  {
+    id: 1,
+    full_name: "Nguyễn Văn A",
+    email: "nguyenvana@example.com",
+    phone: "0123456789",
+    nationality: "Vietnamese",
+    created_at: "2024-01-10T10:00:00Z",
+    updated_at: "2024-01-10T10:00:00Z"
+  },
+  {
+    id: 2,
+    full_name: "Trần Thị B",
+    email: "tranthib@example.com",
+    phone: "0987654321",
+    nationality: "Vietnamese",
+    created_at: "2024-01-12T14:30:00Z",
+    updated_at: "2024-01-12T14:30:00Z"
   }
 ];
 
 const mockBookings: Booking[] = [
   {
-    id: "booking-001",
-    roomId: "room-001",
-    customerName: "Nguyễn Văn A",
-    checkInDate: "2024-01-15",
-    checkOutDate: "2024-01-17",
-    guests: 2,
-    totalAmount: 1000000,
-    status: "confirmed",
-    createdAt: "2024-01-10T10:00:00Z"
+    id: 1,
+    customer_id: 1,
+    hotel_id: 1,
+    check_in: "2024-01-15",
+    check_out: "2024-01-17",
+    total_cost: 1000000,
+    status: BookingStatus.CONFIRMED,
+    created_at: "2024-01-10T10:00:00Z",
+    updated_at: "2024-01-10T10:00:00Z"
   },
   {
-    id: "booking-002",
-    roomId: "room-002",
-    customerName: "Trần Thị B",
-    checkInDate: "2024-01-20",
-    checkOutDate: "2024-01-22",
-    guests: 2,
-    totalAmount: 1600000,
-    status: "pending",
-    createdAt: "2024-01-12T14:30:00Z"
+    id: 2,
+    customer_id: 2,
+    hotel_id: 1,
+    check_in: "2024-01-20",
+    check_out: "2024-01-22",
+    total_cost: 1600000,
+    status: BookingStatus.PENDING,
+    created_at: "2024-01-12T14:30:00Z",
+    updated_at: "2024-01-12T14:30:00Z"
   }
 ];
 
@@ -120,12 +176,12 @@ const calculateNights = (checkIn: string, checkOut: string): number => {
 
 // Booking Service Class
 export class BookingService {
-  // Lấy danh sách phòng có sẵn
+  // Lấy danh sách phòng có sẵn với thông tin chi tiết
   static async getAvailableRooms(
     checkInDate: string,
     checkOutDate: string,
     guests: number
-  ): Promise<Room[]> {
+  ): Promise<RoomWithDetails[]> {
     try {
       // TODO: Thay thế bằng API call thực tế
       // const response = await fetch(`${API_BASE_URL}/rooms/availability`, {
@@ -138,12 +194,32 @@ export class BookingService {
 
       // Mock implementation
       const nights = calculateNights(checkInDate, checkOutDate);
-      return mockRooms
-        .filter(room => room.available && room.maxGuests >= guests)
-        .map(room => ({
+      const availableRooms: RoomWithDetails[] = [];
+
+      for (const room of mockRooms) {
+        if (room.status !== RoomStatus.AVAILABLE) continue;
+
+        const roomType = mockRoomTypes.find(rt => rt.id === room.type_id);
+        if (!roomType || roomType.max_guests < guests) continue;
+
+        const roomWithDetails: RoomWithDetails = {
           ...room,
-          price: room.price * nights // Tính giá theo số đêm
-        }));
+          type: roomType.name,
+          name: `${roomType.name} Room ${room.number}`,
+          price: roomType.price * nights,
+          size: "25m²", // Mock data
+          beds: "1 giường đôi", // Mock data
+          amenities: ["WiFi miễn phí", "TV 42 inch", "Minibar"], // Mock data
+          images: ["/images/gallery1.jpg"], // Mock data
+          available: room.status === RoomStatus.AVAILABLE,
+          maxGuests: roomType.max_guests,
+          roomType
+        };
+
+        availableRooms.push(roomWithDetails);
+      }
+
+      return availableRooms;
     } catch (error) {
       console.error('Error fetching available rooms:', error);
       throw new Error('Không thể tải danh sách phòng');
@@ -164,19 +240,39 @@ export class BookingService {
 
       // Mock implementation
       const nights = calculateNights(bookingRequest.checkInDate, bookingRequest.checkOutDate);
-      const room = mockRooms.find(r => r.type === bookingRequest.roomType);
-      if (!room) throw new Error('Loại phòng không hợp lệ');
+      const roomType = mockRoomTypes.find(rt => rt.name === bookingRequest.roomType);
+      if (!roomType) throw new Error('Loại phòng không hợp lệ');
+
+      // Create or find customer
+      let customer = mockCustomers.find(c =>
+        c.email === bookingRequest.customerInfo.email ||
+        c.phone === bookingRequest.customerInfo.phone
+      );
+
+      if (!customer) {
+        const newCustomerId = Math.max(...mockCustomers.map(c => c.id)) + 1;
+        customer = {
+          id: newCustomerId,
+          full_name: bookingRequest.customerInfo.name,
+          email: bookingRequest.customerInfo.email,
+          phone: bookingRequest.customerInfo.phone,
+          nationality: "Vietnamese",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        mockCustomers.push(customer);
+      }
 
       const newBooking: Booking = {
-        id: `booking-${Date.now()}`,
-        roomId: room.id,
-        customerName: bookingRequest.customerInfo.name,
-        checkInDate: bookingRequest.checkInDate,
-        checkOutDate: bookingRequest.checkOutDate,
-        guests: bookingRequest.guests,
-        totalAmount: room.price * nights,
-        status: 'pending',
-        createdAt: new Date().toISOString()
+        id: Math.max(...mockBookings.map(b => b.id)) + 1,
+        customer_id: customer.id,
+        hotel_id: 1, // Default hotel
+        check_in: bookingRequest.checkInDate,
+        check_out: bookingRequest.checkOutDate,
+        total_cost: roomType.price * nights,
+        status: BookingStatus.PENDING,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       };
 
       mockBookings.push(newBooking);
@@ -188,7 +284,7 @@ export class BookingService {
   }
 
   // Lấy danh sách bookings
-  static async getBookings(status?: string): Promise<Booking[]> {
+  static async getBookings(status?: BookingStatus): Promise<Booking[]> {
     try {
       // TODO: Thay thế bằng API call thực tế
       // const params = status ? `?status=${status}` : '';
@@ -208,7 +304,7 @@ export class BookingService {
   }
 
   // Cập nhật trạng thái booking
-  static async updateBookingStatus(bookingId: string, status: Booking['status']): Promise<Booking> {
+  static async updateBookingStatus(bookingId: string, status: BookingStatus): Promise<Booking> {
     try {
       // TODO: Thay thế bằng API call thực tế
       // const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}/status`, {
@@ -220,7 +316,8 @@ export class BookingService {
       // return data.booking;
 
       // Mock implementation
-      const booking = mockBookings.find(b => b.id === bookingId);
+      const bookingIdNum = parseInt(bookingId);
+      const booking = mockBookings.find(b => b.id === bookingIdNum);
       if (!booking) throw new Error('Booking không tồn tại');
 
       booking.status = status;
@@ -240,10 +337,11 @@ export class BookingService {
       // });
 
       // Mock implementation
-      const booking = mockBookings.find(b => b.id === bookingId);
+      const bookingIdNum = parseInt(bookingId);
+      const booking = mockBookings.find(b => b.id === bookingIdNum);
       if (!booking) throw new Error('Booking không tồn tại');
 
-      booking.status = 'cancelled';
+      booking.status = BookingStatus.CANCELLED;
     } catch (error) {
       console.error('Error canceling booking:', error);
       throw new Error('Không thể hủy booking');
@@ -267,11 +365,13 @@ export class BookingService {
       // return data;
 
       // Mock implementation
-      const bookings = mockBookings.filter(b =>
-        b.status === 'confirmed' || b.status === 'checked-in' || b.status === 'checked-out'
+      const bookings = mockBookings.filter((b: Booking) =>
+        b.status === BookingStatus.CONFIRMED ||
+        b.status === BookingStatus.CHECKED_IN ||
+        b.status === BookingStatus.CHECKED_OUT
       );
 
-      const totalRevenue = bookings.reduce((sum, booking) => sum + booking.totalAmount, 0);
+      const totalRevenue = bookings.reduce((sum: number, booking: Booking) => sum + booking.total_cost, 0);
       const totalBookings = bookings.length;
       const averageBookingValue = totalBookings > 0 ? totalRevenue / totalBookings : 0;
 

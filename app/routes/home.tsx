@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUI } from "../contexts/UIContext";
 import { useAuth } from "../contexts/AuthContext";
+import type { User } from "../contexts/AuthContext";
 import Header from "../components/Header";
 import BookingSystem from "../components/BookingSystem";
 import EnhancedSearch from "../components/EnhancedSearch";
@@ -45,6 +46,7 @@ import {
 
 export default function Home() {
   const { isDark } = useUI();
+  const { isAuthenticated, isAdmin, canAccessAdminPanel } = useAuth();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
@@ -313,25 +315,59 @@ export default function Home() {
                   Tìm phòng
                 </button>
               </form>
-              <div className="mt-4 text-center space-x-4">
-                <a
-                  href="/demo"
-                  className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
-                >
-                  👑 Trải nghiệm hệ thống phân quyền
-                </a>
-                <a
-                  href="/hotels"
-                  className="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
-                >
-                  🏨 Khám phá khách sạn (Phong cách Booking.com)
-                </a>
-                <a
-                  href="/booking"
-                  className="inline-block px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
-                >
-                  🏨 Hệ thống đặt phòng chi tiết
-                </a>
+              <div className="mt-4 text-center">
+                <div className="flex flex-wrap gap-3 justify-center">
+                  {/* Các nút luôn hiển thị */}
+                  <a
+                    href="/demo"
+                    className="inline-block px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                  >
+                    👑 Hệ thống phân quyền
+                  </a>
+                  <a
+                    href="/hotels"
+                    className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                  >
+                    🏨 Danh sách khách sạn
+                  </a>
+                  <a
+                    href="/booking"
+                    className="inline-block px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                  >
+                    📅 Đặt phòng chi tiết
+                  </a>
+
+                  {/* Các nút chỉ dành cho Admin */}
+                  {canAccessAdminPanel && (
+                    <>
+                      <a
+                        href="/dashboard"
+                        className="inline-block px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                      >
+                        📊 Dashboard quản lý
+                      </a>
+                      <a
+                        href="/hotels/manage"
+                        className="inline-block px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                      >
+                        🏨 Quản lý khách sạn
+                      </a>
+                      <a
+                        href="/customers/manage"
+                        className="inline-block px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg hover:from-teal-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 text-sm font-semibold"
+                      >
+                        👥 Quản lý khách hàng
+                      </a>
+                    </>
+                  )}
+
+                  {/* Hiển thị trạng thái đăng nhập */}
+                  {isAuthenticated && (
+                    <div className="px-3 py-2 bg-gray-600 text-white rounded-lg text-sm">
+                      👤 {isAdmin ? 'Admin' : 'Khách hàng'}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
