@@ -6,6 +6,8 @@ interface UIContextType {
   toggleDarkMode: () => void;
   isSidebarCollapsed: boolean;
   toggleSidebar: () => void;
+  darkModeElement: string | null;
+  setDarkModeElement: (elementId: string | null) => void;
 }
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -25,6 +27,13 @@ export function UIProvider({ children }: { children: ReactNode }) {
     return false;
   });
 
+  const [darkModeElement, setDarkModeElement] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("darkModeElement");
+    }
+    return null;
+  });
+
   const toggleDarkMode = () => {
     setIsDark((prev) => {
       const newValue = !prev;
@@ -39,6 +48,15 @@ export function UIProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("sidebarCollapsed", newValue.toString());
       return newValue;
     });
+  };
+
+  const handleSetDarkModeElement = (elementId: string | null) => {
+    setDarkModeElement(elementId);
+    if (elementId) {
+      localStorage.setItem("darkModeElement", elementId);
+    } else {
+      localStorage.removeItem("darkModeElement");
+    }
   };
 
   useEffect(() => {
@@ -56,6 +74,8 @@ export function UIProvider({ children }: { children: ReactNode }) {
         toggleDarkMode,
         isSidebarCollapsed,
         toggleSidebar,
+        darkModeElement,
+        setDarkModeElement: handleSetDarkModeElement,
       }}
     >
       {children}

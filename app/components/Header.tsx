@@ -35,7 +35,7 @@ export default function Header() {
 
       {/* Phần bên phải */}
       <div className="flex gap-4 items-center relative">
-        <DarkModeToggle />
+        <DarkModeToggle mode="global" />
 
         {!isAuthenticated ? (
           // 🧍 Khi chưa đăng nhập

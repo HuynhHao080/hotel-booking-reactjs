@@ -7,6 +7,12 @@ export default [
   // route `/demo` - Hướng dẫn phân quyền
   route("demo", "routes/demo.tsx"),
 
+  // route `/dark-mode-demo` - Demo dark mode cục bộ
+  route("dark-mode-demo", "routes/dark-mode-demo.tsx"),
+
+  // route `/local-dark-mode-example` - Ví dụ thực tế dark mode cục bộ
+  route("local-dark-mode-example", "routes/local-dark-mode-example.tsx"),
+
   // route `/dashboard`
   route("dashboard", "routes/dashboard.tsx"),
 

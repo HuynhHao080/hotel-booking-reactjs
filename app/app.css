@@ -13,3 +13,52 @@ body {
     color-scheme: dark;
   }
 }
+
+/* Dark mode styles cho các phần tử cụ thể */
+.dark-section {
+  @apply bg-gray-900 text-white;
+}
+
+.dark-section .bg-white {
+  @apply bg-gray-800;
+}
+
+.dark-section .text-gray-900 {
+  @apply text-gray-100;
+}
+
+.dark-section .text-gray-800 {
+  @apply text-gray-200;
+}
+
+.dark-section .text-gray-700 {
+  @apply text-gray-300;
+}
+
+.dark-section .text-gray-600 {
+  @apply text-gray-400;
+}
+
+.dark-section .text-gray-500 {
+  @apply text-gray-500;
+}
+
+.dark-section .border-gray-200 {
+  @apply border-gray-700;
+}
+
+.dark-section .border-gray-300 {
+  @apply border-gray-600;
+}
+
+.dark-section .hover\:bg-gray-50:hover {
+  @apply hover:bg-gray-700;
+}
+
+.dark-section .bg-gray-50 {
+  @apply bg-gray-800;
+}
+
+.dark-section .bg-gray-100 {
+  @apply bg-gray-700;
+}
